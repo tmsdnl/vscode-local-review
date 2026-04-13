@@ -15,7 +15,7 @@ test('createEmptyState provides a default active session', () => {
 
   assert.equal(state.version, 1);
   assert.equal(state.activeSessionId, 'S-001');
-  assert.equal(state.sessions[0].title, 'Code Review');
+  assert.equal(state.sessions[0].title, 'Local Review');
   assert.equal(ensureActiveSession(state).id, 'S-001');
 });
 

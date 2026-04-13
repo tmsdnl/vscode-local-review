@@ -4,3 +4,14 @@ test/
 *.ts
 tsconfig.json
 dist/**/*.map
+dist/test/
+.vscode/
+.vscode-test/
+.review/
+*.vsix
+AGENTS.md
+CLAUDE.md
+.DS_Store
+.git/
+.gitignore
+pnpm-lock.yaml

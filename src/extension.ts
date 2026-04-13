@@ -108,10 +108,10 @@ class CodeReviewExtension implements vscode.Disposable {
     this.store = new ReviewStore(storageUri);
     this.state = await this.store.load();
     this.explorer = new ReviewExplorer(this.state);
-    this.controller = vscode.comments.createCommentController('vscode-local-review', 'Code Review');
+    this.controller = vscode.comments.createCommentController('local-review', 'Local Review');
     this.controller.options = {
-      prompt: 'Add review comment',
-      placeHolder: 'Describe the issue'
+      prompt: 'Add local review note',
+      placeHolder: 'Describe the review note'
     };
     this.controller.commentingRangeProvider = {
       provideCommentingRanges: (document) => {
@@ -208,9 +208,9 @@ class CodeReviewExtension implements vscode.Disposable {
   private async startSession(): Promise<void> {
     const state = this.requireState();
     const title = await vscode.window.showInputBox({
-      title: 'New Code Review',
-      prompt: 'Code review name',
-      value: 'Code Review'
+      title: 'New Local Review',
+      prompt: 'Local review name',
+      value: 'Local Review'
     });
     if (!title) {
       return;
@@ -386,7 +386,7 @@ class CodeReviewExtension implements vscode.Disposable {
     const items = this.itemsForGroup(group);
 
     const confirmation = await vscode.window.showWarningMessage(
-      `Delete this code review and its ${items.length} item${items.length === 1 ? '' : 's'}?`,
+      `Delete this local review and its ${items.length} note${items.length === 1 ? '' : 's'}?`,
       { modal: true },
       'Delete'
     );
@@ -754,21 +754,21 @@ class CodeReviewExtension implements vscode.Disposable {
 
   private requireState(): ReviewState {
     if (!this.state) {
-      throw new Error('Code Review extension state has not been initialized.');
+      throw new Error('Local Review extension state has not been initialized.');
     }
     return this.state;
   }
 
   private requireStore(): ReviewStore {
     if (!this.store) {
-      throw new Error('Code Review store has not been initialized.');
+      throw new Error('Local Review store has not been initialized.');
     }
     return this.store;
   }
 
   private requireController(): vscode.CommentController {
     if (!this.controller) {
-      throw new Error('Code Review comment controller has not been initialized.');
+      throw new Error('Local Review comment controller has not been initialized.');
     }
     return this.controller;
   }
@@ -816,7 +816,7 @@ class CodeReviewExtension implements vscode.Disposable {
       return undefined;
     }
 
-    const filename = `${slugFilePart(session?.title ?? 'vscode-local-review')}-${session?.id ?? 'all'}.md`;
+    const filename = `${slugFilePart(session?.title ?? 'local-review')}-${session?.id ?? 'all'}.md`;
     const directoryUri = vscode.Uri.joinPath(root.uri, '.review');
     return { directoryUri, fileUri: vscode.Uri.joinPath(directoryUri, filename) };
   }
@@ -844,7 +844,7 @@ function slugFilePart(value: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
-  return slug || 'vscode-local-review';
+  return slug || 'local-review';
 }
 
 

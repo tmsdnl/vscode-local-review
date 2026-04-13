@@ -20,7 +20,7 @@ export function generateMarkdownExport(state: ReviewState, options: MarkdownExpo
     sessionItems.filter((item) => includeStatuses.includes(item.status))
   );
 
-  const lines: string[] = [`# Code Review: ${session?.title ?? 'All Code Reviews'}`, '', `Generated: ${generatedAt}`];
+  const lines: string[] = [`# Local Review: ${session?.title ?? 'All Local Reviews'}`, '', `Generated: ${generatedAt}`];
 
   if (session?.repository?.root) {
     lines.push(`Repository Root: ${session.repository.root}`);

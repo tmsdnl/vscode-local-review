@@ -1,40 +1,45 @@
-# Code Review
+# Local Review to Markdown
 
-Local-first VS Code inline review extension. It captures editor-anchored review
-comments, stores canonical JSON state in workspace-specific extension storage,
-and exports agent-ready Markdown review context.
+Capture local inline review notes in VS Code and export them as Markdown for handoff.
+
+Local Review to Markdown stores canonical review state in VS Code workspace extension storage. It does not write review state into project files. Markdown exports are written to `.review/` only when export is run.
+
+## Use
+
+1. Open a file-backed workspace.
+2. Use the editor gutter comment action, or select code and run `Local Review: Add Review Note`.
+3. Write the review note in the native VS Code comments UI.
+4. Open the `Local Review` Activity Bar view to open, resolve, reopen, dismiss, copy, delete, or move notes between local reviews.
+5. Run `Local Review: Export Markdown` from the view title or command palette.
+
+The exported Markdown includes open and stale notes, file locations, excerpts, and Git metadata when the workspace is trusted and Git is available.
+
+## Privacy
+
+Review state stays on the local machine in VS Code workspace extension storage. The extension has no telemetry and no network service integration.
+
+In untrusted workspaces, Git metadata capture is disabled. Local review notes and Markdown export still work for file-backed workspaces.
+
+## Limitations
+
+- Virtual workspaces are not supported.
+- Reviews are local to the VS Code workspace storage.
+- Exported Markdown is written into `.review/` in the workspace folder.
+- Resolved and dismissed notes are kept in local state but omitted from the default Markdown export.
 
 ## Development
 
 ```sh
 pnpm install
 pnpm run compile
+pnpm run lint
 pnpm test
+pnpm run test:integration
 ```
 
-## Try It Locally
+To package locally:
 
-Open this repository in VS Code and run the `Run Extension` debug configuration,
-or press `F5`. That launches an Extension Development Host with the extension
-loaded.
-
-In the development host:
-
-1. Open a file.
-2. Use the gutter `+` to start a native review comment, or select code and run `Add Comment`.
-3. Enter the comment in the native inline comments widget.
-4. Open the `Code Review` Activity Bar view to manage reviews. Items are grouped
-   by code review, with per-item actions for open, resolve, reopen, dismiss,
-   copy, and delete. Drag items between code reviews to move them.
-5. Use the code review header actions to resolve or delete a whole code review.
-6. Run `Export Markdown` from the side pane title bar or command palette to
-   write the selected review to `.review/` and open it in an editor tab.
-
-Canonical review state is stored in VS Code workspace-specific extension
-storage.
-
-The extension uses VS Code's native Comments API for creation, so review
-threads also appear in the built-in `Comments` panel.
-
-New code reviews are always workspace reviews. Git metadata is captured
-automatically whenever the active workspace folder is inside a Git repository.
+```sh
+pnpm run package:list
+pnpm run package:vsix
+```

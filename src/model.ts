@@ -58,7 +58,7 @@ export interface ReviewState {
 export function createEmptyState(now = new Date().toISOString()): ReviewState {
   const session: ReviewSession = {
     id: 'S-001',
-    title: 'Code Review',
+    title: 'Local Review',
     scope: 'workspace',
     active: true,
     createdAt: now,
@@ -87,7 +87,7 @@ export function ensureActiveSession(state: ReviewState, now = new Date().toISOSt
     return fallback;
   }
 
-  const session = createSession(state, 'Code Review', 'workspace', now);
+  const session = createSession(state, 'Local Review', 'workspace', now);
   state.activeSessionId = session.id;
   return session;
 }

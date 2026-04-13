@@ -1,18 +1,44 @@
 {
-  "name": "vscode-local-review",
-  "displayName": "Code Review",
-  "description": "Local-first inline code review comments with agent-ready Markdown export.",
-  "version": "0.0.1",
+  "name": "local-review",
+  "displayName": "Local Review to Markdown",
+  "description": "Local-first inline review notes with Markdown export.",
+  "version": "0.1.0",
   "publisher": "tmsdnl",
-  "private": true,
   "packageManager": "pnpm@10.33.0",
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "icon": "resources/marketplace-icon.png",
+  "galleryBanner": {
+    "color": "#0B5FFF",
+    "theme": "dark"
+  },
+  "pricing": "Free",
+  "homepage": "https://github.com/tmsdnl/vscode-local-review#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/tmsdnl/vscode-local-review.git"
   },
+  "bugs": {
+    "url": "https://github.com/tmsdnl/vscode-local-review/issues"
+  },
+  "keywords": [
+    "local review",
+    "code review",
+    "markdown",
+    "comments",
+    "agent"
+  ],
   "engines": {
     "vscode": "^1.100.0"
+  },
+  "extensionKind": [
+    "workspace"
+  ],
+  "capabilities": {
+    "virtualWorkspaces": false,
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Git metadata capture is disabled in untrusted workspaces. Local review notes and Markdown export remain available for file-backed workspaces."
+    }
   },
   "categories": [
     "Other"
@@ -41,78 +67,94 @@
     "commands": [
       {
         "command": "codeReview.startSession",
-        "title": "New Code Review",
+        "title": "New Local Review",
+        "category": "Local Review",
         "icon": "$(add)"
       },
       {
         "command": "codeReview.addComment",
-        "title": "Add Comment"
+        "title": "Add Review Note",
+        "category": "Local Review"
       },
       {
         "command": "codeReview.createComment",
-        "title": "Create"
+        "title": "Create",
+        "category": "Local Review"
       },
       {
         "command": "codeReview.editComment",
         "title": "Edit Comment",
+        "category": "Local Review",
         "icon": "$(edit)"
       },
       {
         "command": "codeReview.saveComment",
-        "title": "Save"
+        "title": "Save",
+        "category": "Local Review"
       },
       {
         "command": "codeReview.cancelComment",
-        "title": "Cancel"
+        "title": "Cancel",
+        "category": "Local Review"
       },
       {
         "command": "codeReview.exportMarkdown",
         "title": "Export Markdown",
+        "category": "Local Review",
         "icon": "$(export)"
       },
       {
         "command": "codeReview.openItem",
         "title": "Open",
+        "category": "Local Review",
         "icon": "$(comment-discussion)"
       },
       {
         "command": "codeReview.resolveItem",
-        "title": "Resolve Item",
+        "title": "Resolve Note",
+        "category": "Local Review",
         "icon": "$(check)"
       },
       {
         "command": "codeReview.dismissItem",
-        "title": "Dismiss Item",
+        "title": "Dismiss Note",
+        "category": "Local Review",
         "icon": "$(circle-slash)"
       },
       {
         "command": "codeReview.reopenItem",
-        "title": "Reopen Item",
+        "title": "Reopen Note",
+        "category": "Local Review",
         "icon": "$(refresh)"
       },
       {
         "command": "codeReview.deleteItem",
-        "title": "Delete Item",
+        "title": "Delete Note",
+        "category": "Local Review",
         "icon": "$(trash)"
       },
       {
         "command": "codeReview.editItem",
-        "title": "Edit Item",
+        "title": "Edit Note",
+        "category": "Local Review",
         "icon": "$(edit)"
       },
       {
         "command": "codeReview.copyItem",
-        "title": "Copy Item",
+        "title": "Copy Note",
+        "category": "Local Review",
         "icon": "$(copy)"
       },
       {
         "command": "codeReview.resolveGroup",
-        "title": "Resolve Code Review",
+        "title": "Resolve Local Review",
+        "category": "Local Review",
         "icon": "$(check-all)"
       },
       {
         "command": "codeReview.deleteGroup",
-        "title": "Delete Code Review",
+        "title": "Delete Local Review",
+        "category": "Local Review",
         "icon": "$(trash)"
       }
     ],
@@ -166,48 +208,48 @@
         {
           "command": "codeReview.createComment",
           "group": "inline",
-          "when": "commentController == vscode-local-review && commentThreadIsEmpty"
+          "when": "commentController == local-review && commentThreadIsEmpty"
         }
       ],
       "comments/commentThread/title": [
         {
           "command": "codeReview.resolveItem",
           "group": "navigation@1",
-          "when": "commentController == vscode-local-review && (commentThread == reviewOpen || commentThread == reviewStale)"
+          "when": "commentController == local-review && (commentThread == reviewOpen || commentThread == reviewStale)"
         },
         {
           "command": "codeReview.reopenItem",
           "group": "navigation@1",
-          "when": "commentController == vscode-local-review && commentThread == reviewResolved"
+          "when": "commentController == local-review && commentThread == reviewResolved"
         },
         {
           "command": "codeReview.dismissItem",
           "group": "navigation@2",
-          "when": "commentController == vscode-local-review && (commentThread == reviewOpen || commentThread == reviewStale || commentThread == reviewResolved)"
+          "when": "commentController == local-review && (commentThread == reviewOpen || commentThread == reviewStale || commentThread == reviewResolved)"
         },
         {
           "command": "codeReview.deleteItem",
           "group": "navigation@3",
-          "when": "commentController == vscode-local-review && (commentThread == draft || commentThread == reviewOpen || commentThread == reviewStale || commentThread == reviewResolved)"
+          "when": "commentController == local-review && (commentThread == draft || commentThread == reviewOpen || commentThread == reviewStale || commentThread == reviewResolved)"
         }
       ],
       "comments/comment/title": [
         {
           "command": "codeReview.editComment",
           "group": "inline@1",
-          "when": "commentController == vscode-local-review && comment == reviewComment"
+          "when": "commentController == local-review && comment == reviewComment"
         }
       ],
       "comments/comment/context": [
         {
           "command": "codeReview.saveComment",
           "group": "inline@1",
-          "when": "commentController == vscode-local-review && comment == reviewCommentEditing"
+          "when": "commentController == local-review && comment == reviewCommentEditing"
         },
         {
           "command": "codeReview.cancelComment",
           "group": "inline@2",
-          "when": "commentController == vscode-local-review && comment == reviewCommentEditing"
+          "when": "commentController == local-review && comment == reviewCommentEditing"
         }
       ],
       "view/item/context": [
@@ -269,7 +311,7 @@
       "activitybar": [
         {
           "id": "codeReview",
-          "title": "Code Review",
+          "title": "Local Review",
           "icon": "resources/vscode-local-review.svg"
         }
       ]
@@ -278,7 +320,7 @@
       "codeReview": [
         {
           "id": "codeReviewExplorer",
-          "name": "Code Review"
+          "name": "Local Review"
         }
       ]
     }
@@ -289,12 +331,15 @@
     "watch": "tsc -watch -p ./",
     "lint": "tsc --noEmit -p ./",
     "test": "pnpm run compile && node --test \"dist/test/*.test.js\"",
-    "test:integration": "pnpm run compile && node ./dist/test/runIntegration.js"
+    "test:integration": "pnpm run compile && node ./dist/test/runIntegration.js",
+    "package:list": "vsce ls --tree",
+    "package:vsix": "vsce package"
   },
   "devDependencies": {
-    "@vscode/test-electron": "2.5.2",
     "@types/node": "22.14.0",
     "@types/vscode": "1.100.0",
+    "@vscode/test-electron": "2.5.2",
+    "@vscode/vsce": "^3.7.1",
     "typescript": "5.9.3"
   }
 }

@@ -59,7 +59,7 @@ test('generateMarkdownExport writes deterministic agent-oriented markdown', () =
 
   const markdown = generateMarkdownExport(state, { generatedAt: '2026-04-12T10:15:00.000Z' });
 
-  assert.match(markdown, /^# Code Review: Working Tree Review/);
+  assert.match(markdown, /^# Local Review: Working Tree Review/);
   assert.match(markdown, /Generated: 2026-04-12T10:15:00.000Z/);
   assert.match(markdown, /Branch: main/);
   assert.match(markdown, /HEAD: abc123/);
@@ -121,7 +121,7 @@ test('generateMarkdownExport selects the requested code review', () => {
 
   const markdown = generateMarkdownExport(state, { sessionId: 'S-002', generatedAt: '2026-04-12T10:15:00.000Z' });
 
-  assert.match(markdown, /^# Code Review: Selected Review/m);
+  assert.match(markdown, /^# Local Review: Selected Review/m);
   assert.match(markdown, /Selected body/);
   assert.doesNotMatch(markdown, /First body/);
 });
