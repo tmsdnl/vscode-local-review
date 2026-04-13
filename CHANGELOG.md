@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1
+
+### Other Changes
+- refresh marketplace copy and badges
+
 ## 0.1.0
 
 - Initial public release of Local Review to Markdown.

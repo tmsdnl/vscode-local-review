@@ -2,7 +2,7 @@
   "name": "local-review-md",
   "displayName": "Local Review to Markdown",
   "description": "Annotate code with inline review notes, organize them into named groups, and export a saved Markdown file — ready to use as context in any AI-assisted code review.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "tmsdnl",
   "packageManager": "pnpm@10.33.0",
   "license": "MIT",
