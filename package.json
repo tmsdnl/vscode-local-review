@@ -1,0 +1,300 @@
+{
+  "name": "vscode-local-review",
+  "displayName": "Code Review",
+  "description": "Local-first inline code review comments with agent-ready Markdown export.",
+  "version": "0.0.1",
+  "publisher": "tmsdnl",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tmsdnl/vscode-local-review.git"
+  },
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:codeReviewExplorer",
+    "onCommand:codeReview.startSession",
+    "onCommand:codeReview.addComment",
+    "onCommand:codeReview.createComment",
+    "onCommand:codeReview.editComment",
+    "onCommand:codeReview.saveComment",
+    "onCommand:codeReview.cancelComment",
+    "onCommand:codeReview.exportMarkdown",
+    "onCommand:codeReview.resolveItem",
+    "onCommand:codeReview.dismissItem",
+    "onCommand:codeReview.reopenItem",
+    "onCommand:codeReview.deleteItem",
+    "onCommand:codeReview.editItem",
+    "onCommand:codeReview.copyItem",
+    "onCommand:codeReview.resolveGroup",
+    "onCommand:codeReview.deleteGroup"
+  ],
+  "main": "./dist/src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codeReview.startSession",
+        "title": "New Code Review",
+        "icon": "$(add)"
+      },
+      {
+        "command": "codeReview.addComment",
+        "title": "Add Comment"
+      },
+      {
+        "command": "codeReview.createComment",
+        "title": "Create"
+      },
+      {
+        "command": "codeReview.editComment",
+        "title": "Edit Comment",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "codeReview.saveComment",
+        "title": "Save"
+      },
+      {
+        "command": "codeReview.cancelComment",
+        "title": "Cancel"
+      },
+      {
+        "command": "codeReview.exportMarkdown",
+        "title": "Export Markdown",
+        "icon": "$(export)"
+      },
+      {
+        "command": "codeReview.openItem",
+        "title": "Open",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "codeReview.resolveItem",
+        "title": "Resolve Item",
+        "icon": "$(check)"
+      },
+      {
+        "command": "codeReview.dismissItem",
+        "title": "Dismiss Item",
+        "icon": "$(circle-slash)"
+      },
+      {
+        "command": "codeReview.reopenItem",
+        "title": "Reopen Item",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "codeReview.deleteItem",
+        "title": "Delete Item",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "codeReview.editItem",
+        "title": "Edit Item",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "codeReview.copyItem",
+        "title": "Copy Item",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "codeReview.resolveGroup",
+        "title": "Resolve Code Review",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "codeReview.deleteGroup",
+        "title": "Delete Code Review",
+        "icon": "$(trash)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "codeReview.editItem",
+          "when": "false"
+        },
+        {
+          "command": "codeReview.copyItem",
+          "when": "false"
+        },
+        {
+          "command": "codeReview.createComment",
+          "when": "false"
+        },
+        {
+          "command": "codeReview.openItem",
+          "when": "false"
+        },
+        {
+          "command": "codeReview.editComment",
+          "when": "false"
+        },
+        {
+          "command": "codeReview.saveComment",
+          "when": "false"
+        },
+        {
+          "command": "codeReview.cancelComment",
+          "when": "false"
+        },
+        {
+          "command": "codeReview.resolveGroup",
+          "when": "false"
+        },
+        {
+          "command": "codeReview.deleteGroup",
+          "when": "false"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "codeReview.addComment",
+          "group": "navigation@19",
+          "when": "resourceScheme == file"
+        }
+      ],
+      "comments/commentThread/context": [
+        {
+          "command": "codeReview.createComment",
+          "group": "inline",
+          "when": "commentController == vscode-local-review && commentThreadIsEmpty"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "codeReview.resolveItem",
+          "group": "navigation@1",
+          "when": "commentController == vscode-local-review && (commentThread == reviewOpen || commentThread == reviewStale)"
+        },
+        {
+          "command": "codeReview.reopenItem",
+          "group": "navigation@1",
+          "when": "commentController == vscode-local-review && commentThread == reviewResolved"
+        },
+        {
+          "command": "codeReview.dismissItem",
+          "group": "navigation@2",
+          "when": "commentController == vscode-local-review && (commentThread == reviewOpen || commentThread == reviewStale || commentThread == reviewResolved)"
+        },
+        {
+          "command": "codeReview.deleteItem",
+          "group": "navigation@3",
+          "when": "commentController == vscode-local-review && (commentThread == draft || commentThread == reviewOpen || commentThread == reviewStale || commentThread == reviewResolved)"
+        }
+      ],
+      "comments/comment/title": [
+        {
+          "command": "codeReview.editComment",
+          "group": "inline@1",
+          "when": "commentController == vscode-local-review && comment == reviewComment"
+        }
+      ],
+      "comments/comment/context": [
+        {
+          "command": "codeReview.saveComment",
+          "group": "inline@1",
+          "when": "commentController == vscode-local-review && comment == reviewCommentEditing"
+        },
+        {
+          "command": "codeReview.cancelComment",
+          "group": "inline@2",
+          "when": "commentController == vscode-local-review && comment == reviewCommentEditing"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "codeReview.openItem",
+          "group": "inline@1",
+          "when": "view == codeReviewExplorer && viewItem =~ /reviewItem/"
+        },
+        {
+          "command": "codeReview.resolveItem",
+          "group": "inline@2",
+          "when": "view == codeReviewExplorer && (viewItem == reviewItem.open || viewItem == reviewItem.stale)"
+        },
+        {
+          "command": "codeReview.reopenItem",
+          "group": "inline@3",
+          "when": "view == codeReviewExplorer && (viewItem == reviewItem.resolved || viewItem == reviewItem.dismissed)"
+        },
+        {
+          "command": "codeReview.dismissItem",
+          "group": "review@1",
+          "when": "view == codeReviewExplorer && viewItem =~ /reviewItem/ && viewItem != reviewItem.dismissed"
+        },
+        {
+          "command": "codeReview.copyItem",
+          "group": "review@3",
+          "when": "view == codeReviewExplorer && viewItem =~ /reviewItem/"
+        },
+        {
+          "command": "codeReview.deleteItem",
+          "group": "review@99",
+          "when": "view == codeReviewExplorer && viewItem =~ /reviewItem/"
+        },
+        {
+          "command": "codeReview.resolveGroup",
+          "group": "inline@1",
+          "when": "view == codeReviewExplorer && viewItem == reviewGroup.nonempty"
+        },
+        {
+          "command": "codeReview.deleteGroup",
+          "group": "inline@2",
+          "when": "view == codeReviewExplorer && (viewItem == reviewGroup.nonempty || viewItem == reviewGroup.empty)"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "codeReview.startSession",
+          "group": "navigation@0",
+          "when": "view == codeReviewExplorer"
+        },
+        {
+          "command": "codeReview.exportMarkdown",
+          "group": "navigation@1",
+          "when": "view == codeReviewExplorer"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codeReview",
+          "title": "Code Review",
+          "icon": "resources/vscode-local-review.svg"
+        }
+      ]
+    },
+    "views": {
+      "codeReview": [
+        {
+          "id": "codeReviewExplorer",
+          "name": "Code Review"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "tsc --noEmit -p ./",
+    "test": "pnpm run compile && node --test \"dist/test/*.test.js\"",
+    "test:integration": "pnpm run compile && node ./dist/test/runIntegration.js"
+  },
+  "devDependencies": {
+    "@vscode/test-electron": "2.5.2",
+    "@types/node": "22.14.0",
+    "@types/vscode": "1.100.0",
+    "typescript": "5.9.3"
+  }
+}
