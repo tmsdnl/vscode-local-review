@@ -36,22 +36,3 @@ pnpm run lint
 pnpm test
 pnpm run test:integration
 ```
-
-To package locally:
-
-```sh
-pnpm run package:list
-pnpm run package:vsix
-```
-
-## Release
-
-Prepare the next release locally with an automatic semver bump and generated changelog section:
-
-```sh
-pnpm release:prepare patch
-```
-
-The command requires a clean git worktree, updates `package.json`, prepends a new `CHANGELOG.md` section from commit subjects since the last release tag, creates a `chore(release): vX.Y.Z` commit, and creates the matching local tag.
-
-After reviewing the generated changelog, push the commit and tag. GitHub Actions will build the VSIX and publish the GitHub Release using the matching `CHANGELOG.md` section as the release notes.

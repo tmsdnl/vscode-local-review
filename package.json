@@ -1,5 +1,5 @@
 {
-  "name": "local-review",
+  "name": "local-review-md",
   "displayName": "Local Review to Markdown",
   "description": "Local-first inline review notes with Markdown export.",
   "version": "0.1.0",
@@ -12,13 +12,13 @@
     "theme": "dark"
   },
   "pricing": "Free",
-  "homepage": "https://github.com/tmsdnl/vscode-local-review#readme",
+  "homepage": "https://github.com/tmsdnl/vscode-local-review-md#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tmsdnl/vscode-local-review.git"
+    "url": "https://github.com/tmsdnl/vscode-local-review-md.git"
   },
   "bugs": {
-    "url": "https://github.com/tmsdnl/vscode-local-review/issues"
+    "url": "https://github.com/tmsdnl/vscode-local-review-md/issues"
   },
   "keywords": [
     "local review",
@@ -341,6 +341,7 @@
     "@types/vscode": "1.100.0",
     "@vscode/test-electron": "2.5.2",
     "@vscode/vsce": "^3.7.1",
+    "ovsx": "^0.10.10",
     "typescript": "5.9.3"
   }
 }

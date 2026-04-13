@@ -1,0 +1,94 @@
+name: Publish Extension
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to publish, for example v0.1.1
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: publish
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      TAG_NAME: ${{ inputs.tag }}
+    steps:
+      - name: Require workflow dispatch from default branch
+        run: |
+          if [ "${GITHUB_REF_NAME}" != "${DEFAULT_BRANCH}" ]; then
+            echo "Publish workflow must be dispatched from ${DEFAULT_BRANCH}, received ${GITHUB_REF_NAME}."
+            exit 1
+          fi
+
+      - name: Check out default branch
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Validate release tag
+        run: |
+          case "$TAG_NAME" in
+            v[0-9]*.[0-9]*.[0-9]*) ;;
+            *)
+              echo "Expected tag in the form vX.Y.Z, received: $TAG_NAME"
+              exit 1
+              ;;
+          esac
+
+          if ! git rev-parse -q --verify "refs/tags/$TAG_NAME" >/dev/null; then
+            echo "Tag $TAG_NAME does not exist in this repository."
+            exit 1
+          fi
+
+      - name: Require tagged commit on default branch
+        run: |
+          tag_commit="$(git rev-list -n 1 "$TAG_NAME")"
+
+          if ! git merge-base --is-ancestor "$tag_commit" "origin/$DEFAULT_BRANCH"; then
+            echo "Tag $TAG_NAME points to $tag_commit, which is not reachable from origin/$DEFAULT_BRANCH."
+            exit 1
+          fi
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download VSIX asset from GitHub Release
+        run: |
+          vsix_path="local-review-md-${TAG_NAME#v}.vsix"
+          gh release download "$TAG_NAME" --pattern "$vsix_path" --dir .
+
+      - name: Publish to Visual Studio Marketplace
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          vsix_path="local-review-md-${TAG_NAME#v}.vsix"
+          pnpm exec vsce publish --packagePath "$vsix_path" --skip-duplicate
+
+      - name: Publish to Open VSX
+        env:
+          OPEN_VSX_TOKEN: ${{ secrets.OPEN_VSX_TOKEN }}
+        run: |
+          vsix_path="local-review-md-${TAG_NAME#v}.vsix"
+          pnpm exec ovsx publish "$vsix_path" -p "$OPEN_VSX_TOKEN" --skip-duplicate

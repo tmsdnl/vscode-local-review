@@ -1,5 +1,8 @@
 name: Release
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     tags:
@@ -16,7 +19,7 @@ jobs:
       TAG_NAME: ${{ github.ref_name }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -26,7 +29,7 @@ jobs:
           version: 10.33.0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: pnpm
@@ -49,7 +52,7 @@ jobs:
       - name: Create or update GitHub release
         run: |
           release_name="Local Review to Markdown ${TAG_NAME}"
-          vsix_path="local-review-${TAG_NAME#v}.vsix"
+          vsix_path="local-review-md-${TAG_NAME#v}.vsix"
 
           if gh release view "$TAG_NAME" >/dev/null 2>&1; then
             gh release edit "$TAG_NAME" --title "$release_name" --notes-file release-notes.md

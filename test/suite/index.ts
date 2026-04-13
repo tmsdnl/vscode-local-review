@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import * as vscode from 'vscode';
 
 export async function run(): Promise<void> {
-  const extension = vscode.extensions.getExtension('tmsdnl.local-review');
+  const extension = vscode.extensions.getExtension('tmsdnl.local-review-md');
   assert.ok(extension, 'expected the Local Review extension to be installed in the extension host');
 
   await extension.activate();
