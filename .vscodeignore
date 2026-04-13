@@ -1,9 +1,12 @@
 node_modules/
+.github/
+scripts/
 src/
 test/
 *.ts
 tsconfig.json
 dist/**/*.map
+dist/scripts/
 dist/test/
 .vscode/
 .vscode-test/

@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG_NAME: ${{ github.ref_name }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests
+        run: pnpm test
+
+      - name: Run integration tests
+        run: xvfb-run -a pnpm run test:integration
+
+      - name: Package VSIX
+        run: pnpm run package:vsix
+
+      - name: Generate release notes
+        run: node ./dist/scripts/release.js notes "$TAG_NAME" > release-notes.md
+
+      - name: Create or update GitHub release
+        run: |
+          release_name="Local Review to Markdown ${TAG_NAME}"
+          vsix_path="local-review-${TAG_NAME#v}.vsix"
+
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release edit "$TAG_NAME" --title "$release_name" --notes-file release-notes.md
+          else
+            gh release create "$TAG_NAME" --title "$release_name" --notes-file release-notes.md
+          fi
+
+          gh release upload "$TAG_NAME" "$vsix_path" --clobber
